@@ -1,5 +1,5 @@
-﻿// Level 1 - Basic Product Input
-// Ask for product names, store them in a list, show them when the user types "exit".
+﻿// Level 2 - Sorting & Improved Exit Handling
+// "exit" works in any case and with extra spaces. The list is sorted before display.
 
 List<string> products = new List<string>();
 
@@ -8,17 +8,28 @@ while (true)
     Console.Write("Enter a product name (type 'exit' to finish): ");
     string? input = Console.ReadLine();
 
-    // ReadLine returns null if the input stream is closed, so stop in that case too.
-    if (input == null || input == "exit")
+    // Trim() removes spaces at the start and end; ToLower() ignores upper/lower case.
+    string cleaned = (input ?? "exit").Trim();
+
+    if (cleaned.ToLower() == "exit")
     {
         break;
     }
 
-    products.Add(input);
+    // Ignore empty lines so we do not store blank products.
+    if (cleaned.Length == 0)
+    {
+        continue;
+    }
+
+    products.Add(cleaned);
 }
 
+// Sort alphabetically, ignoring upper/lower case.
+products.Sort(StringComparer.OrdinalIgnoreCase);
+
 Console.WriteLine();
-Console.WriteLine("Products:");
+Console.WriteLine("Products (sorted A-Z):");
 foreach (string product in products)
 {
     Console.WriteLine("- " + product);
